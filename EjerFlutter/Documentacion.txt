@@ -1,0 +1,33 @@
+La aplicacion consta en organicación de carpeta en paginas, tipografias y imagenes.
+Paginas, basicamente dnonde desarrollo las diferentes paginas para crear la aplicacion.
+Tipografia donde hay un font que uso para la ventana de finalizacion.
+Imagenes donde guardo las imagenes necesarias.
+
+Paginas:
+
+1. BarraNavegacion:
+Esta clase define una barra de navegación con  BottomNavigationBarItem, personalizada que se utiliza en todas las pantallas.
+Contiene íconos para Pantalla de Inicio, Perfil y Pantalla de Finalización.
+Se puede personalizar para manejar eventos de toque (onTap) y cambiar la pantalla activa.
+
+2. Historias destacadas: 
+Esta clase define un componente visual de burbuja utilizado para mostrar imágenes circulares con texto debajo.
+Puede ser utilizado para representar elementos visuales dentro de la biografía del usuario.
+
+3. Pantalla de inicio: 
+La pantalla que muestra por defecto al abrirla. Muestra el texto "Instagram" en el centro de la pantalla con la tipografia original y 
+la imagen que me tocó. Utiliza la BarraNavegacion para permitir la navegación entre diferentes pantallas.
+Contiene opciones para ir a la Pantalla de Inicio, Perfil y Pantalla de Finalización.
+
+4. Perfil:
+Muestra información del perfil, como nombre, número de publicaciones, seguidores y seguidos.
+Contiene la imagen de perfil (no carga)
+Tiene un botón "Editar perfil" y una barra de navegación en la parte inferior para cambiar entre Pantalla de Inicio, Perfil y Pantalla de Finalización.
+
+6. PerfilBody:
+La segunda parte del perfil y toda la chicha.
+Muestra la biografía del usuario.
+Utiliza un TabBar con cuatro pestañas para navegar entre diferentes secciones.
+Cada pestaña tiene un ícono representativo (Icons.border_all_sharp, Icons.list, Icons.account_box_outlined, Icons.bookmark_border_rounded).
+Implemento la clase historias destacadas encima de las imagenes.
+El contenido de las pestañas (TabBarView) muestra las 3 imagenes que le corresponde.
