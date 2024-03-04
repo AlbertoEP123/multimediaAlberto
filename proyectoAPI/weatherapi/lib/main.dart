@@ -13,7 +13,8 @@ class MyWeatherApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreenWithDrawer(), // Utiliza HomeScreenWithDrawer como la pantalla de inicio
+      home:
+          HomeScreenWithDrawer(), // Utiliza HomeScreenWithDrawer como la pantalla de inicio
     );
   }
 }
