@@ -11,7 +11,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _cityController = TextEditingController();
   String _weatherData = '';
-  String _googleMapsLink = '';
+  String _cityName = '';
+  bool _isWeatherDataLoaded = false;
 
   @override
   void dispose() {
@@ -47,25 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
       final googleMapsUrl =
           'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Ciudad escrita correcta: '),
-            content: Text('Has elegido la ciudad de $nombreCiudad, $pais'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Cerrar'),
-              ),
-            ],
-          );
-        },
-      );
-
       setState(() {
+        _cityName = '$nombreCiudad, $pais';
         _weatherData = 'Temperatura actual: $temperatura°C\n' +
             'Sensación térmica: $sensacionTermica°C\n' +
             'Temperatura Mínima: $tempMinima°C\n' +
@@ -80,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
             'Velocidad del viento: $velocidadViento m/s\n' +
             'Dirección del viento: $direccionViento°\n' +
             'Coordenadas Geográficas: Latitud: $latitude, Longitud: $longitude';
-        _googleMapsLink = googleMapsUrl;
+        _isWeatherDataLoaded = true;
       });
     } catch (e) {
       setState(() {
@@ -121,29 +105,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   _getWeatherData(city);
                 }
               },
-              child: Text('Obtener clima'),
+              child: Text('Verificar ciudad'),
             ),
             SizedBox(height: 20),
-            Text(
-              _weatherData,
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
+            if (_cityName.isNotEmpty && _isWeatherDataLoaded)
+              Text(
+                'Ciudad Seleccionada: $_cityName',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
             SizedBox(height: 20),
-            if (_googleMapsLink.isNotEmpty)
+            if (_isWeatherDataLoaded)
               ElevatedButton(
                 onPressed: () {
-                  launch(_googleMapsLink);
+                  // Aquí deberías agregar la lógica para el segundo filtro
                 },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.map), // Agrega el icono antes del texto
-                    Text('Ver en Google Maps'),
-                  ],
-                ),
+                child: Text('Segundo filtro'),
               ),
-              
+            SizedBox(height: 20),
+            if (_weatherData.isNotEmpty && _isWeatherDataLoaded)
+              Text(
+                _weatherData,
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+            SizedBox(height: 20),
+            if (_weatherData.isNotEmpty && _isWeatherDataLoaded)
+              ElevatedButton(
+                onPressed: () {
+                  launch('https://www.google.com/maps/search/?api=1&query=');
+                },
+                child: Text('Ver en Google Maps'),
+              ),
           ],
         ),
       ),
