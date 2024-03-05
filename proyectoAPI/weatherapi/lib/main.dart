@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapi/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(MyWeatherApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  runApp(MyWeatherApp(prefs: prefs));
 }
 
 class MyWeatherApp extends StatelessWidget {
+  final SharedPreferences prefs;
+
+  MyWeatherApp({required this.prefs});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,8 +20,7 @@ class MyWeatherApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:
-          HomeScreenWithDrawer(), // Utiliza HomeScreenWithDrawer como la pantalla de inicio
+      home: HomeScreenWithDrawer(prefs: prefs), // Pasa SharedPreferences al widget HomeScreenWithDrawer
     );
   }
 }

@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+
 import 'package:url_launcher/url_launcher.dart';
 import 'api_service.dart';
 import 'drawer_widget.dart';
+import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
+   final String ?username; // Agrega el parámetro username
+
+  HomeScreen({required this.username});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _cityController = TextEditingController();
-  String _weatherData = '';
   String _cityName = '';
+  String _countryInitials = '';
+  String _weatherData = '';
   bool _isWeatherDataLoaded = false;
+  bool _isNightMode = false;
+  late final String username;
 
   @override
   void dispose() {
@@ -20,6 +30,46 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  // Función para verificar la ciudad
+  Future<void> _verifyCity() async {
+    final String city = _cityController.text.trim();
+    if (city.isNotEmpty) {
+      try {
+        Map<String, dynamic> weatherData =
+            await ApiService.getWeatherData(city);
+
+        final nombreCiudad = weatherData['name'];
+        final pais = weatherData['sys']['country'];
+
+        setState(() {
+          _cityName = nombreCiudad;
+          _countryInitials = pais;
+        });
+      } catch (e) {
+        // Limpiar todos los datos si no se puede cargar la ciudad
+        setState(() {
+          _cityName = '';
+          _countryInitials = '';
+          _weatherData = 'error';
+          _isWeatherDataLoaded = false;
+        });
+      }
+    }
+  }
+
+  // Función para obtener el clima extendido
+  
+  String _formatHour(DateTime dateTime) {
+  return '${dateTime.hour}:${dateTime.minute}';
+}
+
+
+// Llamada al método para obtener el pronóstico por hora
+
+
+
+
+  // Función para obtener los datos del clima
   Future<void> _getWeatherData(String city) async {
     try {
       Map<String, dynamic> weatherData = await ApiService.getWeatherData(city);
@@ -47,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
       final longitude = coordenadas['lon'];
       final googleMapsUrl =
           'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-
       setState(() {
         _cityName = '$nombreCiudad, $pais';
         _weatherData = 'Temperatura actual: $temperatura°C\n' +
@@ -73,71 +122,148 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  ThemeData _nightTheme = ThemeData.dark().copyWith(
+    scaffoldBackgroundColor: Colors.black,
+    textTheme: TextTheme(
+      bodyText1: TextStyle(color: Colors.white),
+      bodyText2: TextStyle(color: Colors.white),
+    ),
+  );
+
+  ThemeData _dayTheme = ThemeData.light();
+  // Función para convertir la hora en formato Unix
   String _convertirUnixAFormatoHora(int unixTime) {
     var fecha = DateTime.fromMillisecondsSinceEpoch(unixTime * 1000);
     return '${fecha.hour}:${fecha.minute}:${fecha.second}';
   }
+static Future<Map<String, dynamic>> getHourlyWeatherData(String city) async {
+    // URL de la API para obtener el pronóstico por hora
+    final String apiKey = '25ed3f5e8fa270f9f1f38b18e02e25b1';
+    final String apiUrl = 'https://pro.openweathermap.org/data/2.5/forecast/hourly?q=$city&appid=$apiKey';
+
+    // Realizar la solicitud HTTP
+    final http.Response response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      // Decodificar la respuesta JSON
+      final Map<String, dynamic> data = json.decode(response.body);
+      return data;
+    } else {
+      // En caso de error, lanzar una excepción
+      throw Exception('Error al obtener datos de pronóstico por hora');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Weather App'),
-      ),
-      drawer: DrawerWidget(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _cityController,
-              decoration: InputDecoration(
-                labelText: 'Ciudad',
-                hintText: 'Ingrese una ciudad',
+    // Selecciona el tema apropiado según el modo noche o día
+    final ThemeData currentTheme = _isNightMode ? _nightTheme : _dayTheme;
+
+    return MaterialApp(
+      theme: currentTheme,
+      home: Scaffold(
+        appBar: AppBar(
+         title: Text('Welcome, $username'),
+        ),
+        drawer: DrawerWidget(),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller: _cityController,
+                      style: TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        labelText: 'Ciudad',
+                        hintText: 'Ingrese una ciudad',
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 9.0, horizontal: 5.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      maxLength: 20,
+                      maxLines: 1,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      onPressed: _verifyCity,
+                      child: const Text('Verificar ciudad'),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                final String city = _cityController.text.trim();
-                if (city.isNotEmpty) {
-                  _getWeatherData(city);
-                }
-              },
-              child: Text('Verificar ciudad'),
-            ),
-            SizedBox(height: 20),
-            if (_cityName.isNotEmpty && _isWeatherDataLoaded)
-              Text(
-                'Ciudad Seleccionada: $_cityName',
-                style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              ),
-            SizedBox(height: 20),
-            if (_isWeatherDataLoaded)
+              SizedBox(height: 10),
+              if (_cityName.isNotEmpty)
+                Text(
+                  'Ciudad: $_cityName, $_countryInitials',
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Aquí deberías agregar la lógica para el segundo filtro
+                  final String city = _cityController.text.trim();
+                  if (city.isNotEmpty) {
+                    if (_weatherData.isNotEmpty && _isWeatherDataLoaded) {
+                      setState(() {
+                        _weatherData = '';
+                        _isWeatherDataLoaded = false;
+                      });
+                    } else {
+                      _getWeatherData(city);
+                    }
+                  }
                 },
-                child: Text('Segundo filtro'),
+                child: Text('Obtener Clima'),
               ),
-            SizedBox(height: 20),
-            if (_weatherData.isNotEmpty && _isWeatherDataLoaded)
-              Text(
-                _weatherData,
-                style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              ),
-            SizedBox(height: 20),
-            if (_weatherData.isNotEmpty && _isWeatherDataLoaded)
-              ElevatedButton(
+              SizedBox(height: 20),
+               ElevatedButton(
                 onPressed: () {
-                  launch('https://www.google.com/maps/search/?api=1&query=');
+                  final String city = _cityController.text.trim();
+                  if (city.isNotEmpty) {
+                    getHourlyWeatherData(city);
+                  }
                 },
-                child: Text('Ver en Google Maps'),
+                child: const Text('Condiciones por Hora'),
               ),
-          ],
+
+              SizedBox(height: 20),
+              if (_weatherData.isNotEmpty && _isWeatherDataLoaded)
+                Text(
+                  _weatherData,
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.left,
+                ),
+              SizedBox(height: 20),
+              if (_isWeatherDataLoaded)
+                ElevatedButton(
+                  onPressed: () {
+                    launch(
+                        'https://www.google.com/maps/search/?api=1&query=$_cityName');
+                  },
+                  child: Text('Ver en Google Maps'),
+                ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Cambiar el estado del modo día y noche
+            setState(() {
+              _isNightMode = !_isNightMode;
+            });
+          },
+          child: Icon(Icons.lightbulb),
         ),
       ),
     );

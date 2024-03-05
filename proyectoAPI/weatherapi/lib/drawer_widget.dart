@@ -23,9 +23,10 @@ class DrawerWidget extends StatelessWidget {
             leading: Icon(Icons.home),
             title: Text('Pantalla de Inicio'),
             onTap: () {
+              var prefs;
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreenWithDrawer()),
+                MaterialPageRoute(builder: (context) => HomeScreenWithDrawer(prefs: prefs,)),
               );
             },
           ),
@@ -35,7 +36,7 @@ class DrawerWidget extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => HomeScreen(username: '')),
               );
             },
           ),
