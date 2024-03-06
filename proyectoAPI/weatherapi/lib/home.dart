@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapi/api_weather.dart';
+import 'package:weatherapi/auth.manager.dart';
 import 'drawer_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'drawer_widget.dart'; // Suponiendo que ya tienes la pantalla HomeScreen creada
 
 class HomeScreenWithDrawer extends StatelessWidget {
-  final SharedPreferences prefs;
+  final AuthManager authManager;
 
-  HomeScreenWithDrawer({required this.prefs});
+  HomeScreenWithDrawer({required this.authManager});
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +16,20 @@ class HomeScreenWithDrawer extends StatelessWidget {
       appBar: AppBar(
         title: Text('Weather App'),
       ),
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(
+        authManager: authManager,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            LoginForm(prefs: prefs), // Pasa SharedPreferences al widget LoginForm
+            LoginForm(
+                authManager:
+                    authManager), // Pasar AuthManager al widget LoginForm
             SizedBox(height: 20),
-            RegistrationForm(prefs: prefs), // Pasa SharedPreferences al widget RegistrationForm
+            RegistrationForm(
+                authManager:
+                    authManager), // Pasar AuthManager al widget RegistrationForm
           ],
         ),
       ),
@@ -31,9 +38,9 @@ class HomeScreenWithDrawer extends StatelessWidget {
 }
 
 class RegistrationForm extends StatefulWidget {
-  final SharedPreferences prefs;
+  final AuthManager authManager;
 
-  RegistrationForm({required this.prefs});
+  RegistrationForm({required this.authManager});
 
   @override
   _RegistrationFormState createState() => _RegistrationFormState();
@@ -90,9 +97,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               String repeatPassword = _repeatPasswordController.text;
 
               if (password == repeatPassword) {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.setString(username,
-                    password); // Guardar el usuario y contraseña en SharedPreferences
+                await widget.authManager.register(username, password);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -110,9 +115,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
 }
 
 class LoginForm extends StatefulWidget {
-   final SharedPreferences prefs;
+  final AuthManager authManager;
 
-  LoginForm({required this.prefs});
+  LoginForm({required this.authManager});
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -156,20 +161,18 @@ class _LoginFormState extends State<LoginForm> {
               String username = _usernameController.text;
               String password = _passwordController.text;
 
-              // Aquí puedes realizar la lógica de autenticación
-              if (username == 'usuario' && password == 'contraseña') {
-                // Autenticación exitosa, guarda el nombre de usuario
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.setString('username', username);
-
-                // Navega a la pantalla HomeScreen
+              bool success = await widget.authManager.login(username, password);
+              if (success) {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => HomeScreen(username: username)),
+                    builder: (context) => HomeScreen(
+                      username: username,
+                      authManager: widget.authManager,
+                    ),
+                  ),
                 );
               } else {
-                // Autenticación fallida, muestra un mensaje de error
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content:

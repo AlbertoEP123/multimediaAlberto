@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapi/auth.manager.dart';
 import 'package:weatherapi/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(MyWeatherApp(prefs: prefs));
+  AuthManager authManager = AuthManager(prefs: prefs);
+  runApp(MyWeatherApp(authManager: authManager));
 }
 
 class MyWeatherApp extends StatelessWidget {
-  final SharedPreferences prefs;
+  final AuthManager authManager;
 
-  MyWeatherApp({required this.prefs});
+  MyWeatherApp({required this.authManager});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,9 @@ class MyWeatherApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreenWithDrawer(prefs: prefs), // Pasa SharedPreferences al widget HomeScreenWithDrawer
+      home: HomeScreenWithDrawer(
+        authManager: authManager, // Aquí también pasas el AuthManager
+      ),
     );
   }
 }

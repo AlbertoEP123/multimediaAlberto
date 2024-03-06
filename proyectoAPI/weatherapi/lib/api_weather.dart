@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-
 import 'package:url_launcher/url_launcher.dart';
+import 'package:weatherapi/auth.manager.dart';
 import 'api_service.dart';
 import 'drawer_widget.dart';
 import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
-   final String ?username; // Agrega el parámetro username
+  final String username;
+  final AuthManager authManager;
 
-  HomeScreen({required this.username});
+  HomeScreen({required this.username, required this.authManager});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -58,16 +60,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Función para obtener el clima extendido
-  
-  String _formatHour(DateTime dateTime) {
-  return '${dateTime.hour}:${dateTime.minute}';
-}
 
+  String _formatHour(DateTime dateTime) {
+    return '${dateTime.hour}:${dateTime.minute}';
+  }
 
 // Llamada al método para obtener el pronóstico por hora
-
-
-
 
   // Función para obtener los datos del clima
   Future<void> _getWeatherData(String city) async {
@@ -136,21 +134,17 @@ class _HomeScreenState extends State<HomeScreen> {
     var fecha = DateTime.fromMillisecondsSinceEpoch(unixTime * 1000);
     return '${fecha.hour}:${fecha.minute}:${fecha.second}';
   }
-static Future<Map<String, dynamic>> getHourlyWeatherData(String city) async {
-    // URL de la API para obtener el pronóstico por hora
-    final String apiKey = '25ed3f5e8fa270f9f1f38b18e02e25b1';
-    final String apiUrl = 'https://pro.openweathermap.org/data/2.5/forecast/hourly?q=$city&appid=$apiKey';
 
-    // Realizar la solicitud HTTP
-    final http.Response response = await http.get(Uri.parse(apiUrl));
-
-    if (response.statusCode == 200) {
-      // Decodificar la respuesta JSON
-      final Map<String, dynamic> data = json.decode(response.body);
-      return data;
-    } else {
-      // En caso de error, lanzar una excepción
-      throw Exception('Error al obtener datos de pronóstico por hora');
+  Future<void> _getHourlyWeatherData(String city) async {
+    try {
+      Map<String, dynamic> weatherData =
+          await ApiService.getHourlyWeatherData(city);
+      // Procesa los datos del pronóstico por hora aquí
+      print('Datos del pronóstico por hora: $weatherData');
+    } catch (e) {
+      setState(() {
+        _weatherData = 'Error al obtener datos de pronóstico por hora: $e';
+      });
     }
   }
 
@@ -158,14 +152,15 @@ static Future<Map<String, dynamic>> getHourlyWeatherData(String city) async {
   Widget build(BuildContext context) {
     // Selecciona el tema apropiado según el modo noche o día
     final ThemeData currentTheme = _isNightMode ? _nightTheme : _dayTheme;
+    AuthManager authManager = widget.authManager;
 
     return MaterialApp(
       theme: currentTheme,
       home: Scaffold(
         appBar: AppBar(
-         title: Text('Welcome, $username'),
+          title: Text('Welcome,${widget.username}'),
         ),
-        drawer: DrawerWidget(),
+        drawer: DrawerWidget(authManager: authManager),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -227,16 +222,15 @@ static Future<Map<String, dynamic>> getHourlyWeatherData(String city) async {
                 child: Text('Obtener Clima'),
               ),
               SizedBox(height: 20),
-               ElevatedButton(
+              ElevatedButton(
                 onPressed: () {
                   final String city = _cityController.text.trim();
                   if (city.isNotEmpty) {
-                    getHourlyWeatherData(city);
+                    ApiService.getHourlyWeatherData(city);
                   }
                 },
-                child: const Text('Condiciones por Hora'),
+                child: const Text('Obtener Clima Extendido'),
               ),
-
               SizedBox(height: 20),
               if (_weatherData.isNotEmpty && _isWeatherDataLoaded)
                 Text(
