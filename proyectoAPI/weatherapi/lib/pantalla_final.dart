@@ -43,6 +43,21 @@ class AboutScreen extends StatelessWidget {
                 'Administra la autenticación de usuario mediante el almacenamiento de datos en SharedPreferences. Ofrece métodos para iniciar sesión y registrar nuevos usuarios.',
                 style: TextStyle(fontSize: 18),
               ),
+              Text(
+                'DrawerWidget:\n'
+                'Drawer principal de la app, navega entre las pantallas que ofrece la app',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(
+                'Home (Registro):\n'
+                'Home de la aplicacion. Es el form del registro y login del usuario, si se loguea correctamente, automaticamente carga a la pantalla principal de la api',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(
+                'Main:\n'
+                'Main de la aplicacion, carga la pantalla home y el drawer.',
+                style: TextStyle(fontSize: 18),
+              ),
             ],
           ),
         ),

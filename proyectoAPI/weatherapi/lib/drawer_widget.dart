@@ -3,14 +3,12 @@ import 'package:weatherapi/api_weather.dart';
 import 'pantalla_final.dart';
 import 'home.dart';
 
-import 'package:weatherapi/auth.manager.dart'; // Asegúrate de importar AuthManager
-// Asegúrate de importar HomeScreenWithDrawer
+import 'package:weatherapi/auth.manager.dart';
 
 class DrawerWidget extends StatelessWidget {
-  final AuthManager authManager; // Debes recibir AuthManager aquí
+  final AuthManager authManager;
 
-  const DrawerWidget({Key? key, required this.authManager})
-      : super(key: key); // Asegúrate de recibir AuthManager en el constructor
+  const DrawerWidget({Key? key, required this.authManager}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +18,7 @@ class DrawerWidget extends StatelessWidget {
           const DrawerHeader(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                    'assets/weather.jpg'), // Agrega la imagen de encabezado desde los assets
+                image: AssetImage('assets/weather.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -35,8 +32,7 @@ class DrawerWidget extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomeScreenWithDrawer(
-                          authManager:
-                              authManager, // Pasa authManager en lugar de prefs
+                          authManager: authManager,
                         )),
               );
             },

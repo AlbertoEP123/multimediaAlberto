@@ -23,7 +23,7 @@ class MyWeatherApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: HomeScreenWithDrawer(
-        authManager: authManager, // Aquí también pasas el AuthManager
+        authManager: authManager,
       ),
     );
   }
