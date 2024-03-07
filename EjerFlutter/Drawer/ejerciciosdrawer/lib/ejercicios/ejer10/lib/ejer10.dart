@@ -2,17 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:async';
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Ejer 10',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const RandomColors(),
-    );
-  }
+void main() {
+  runApp(const RandomColors());
 }
 
 class RandomColors extends StatefulWidget {
@@ -35,77 +26,39 @@ class _RandomColorsState extends State<RandomColors> {
     const Color(0xFFFF0000),
     const Color(0xFFFBC512)
   ];
+  late Timer timer;
+  double speed = 1.5;
 
   @override
   void initState() {
     super.initState();
-    getRandomColor();
-    getRandomName();
-    timer();
-  }
-
-  void timer() {
-    Timer.periodic(const Duration(milliseconds: 1500), (timer) {
-      getRandomColor();
-      getRandomName();
-    });
+    startTimer();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Adivina el Color'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text(
-            'Puntos: $points',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-          ),
-          GestureDetector(
-            onTap: () {
-              onGiftTap(randomName, randomColor);
-            },
-            child: Column(
-              children: [
-                Container(
-                  width: 120,
-                  color: randomColor,
-                  height: 120,
-                ),
-                Text(
-                  randomName,
-                  style: TextStyle(
-                    color: randomColor,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context); // Regresa atrás
-            },
-            child: Text('Volver'),
-          ),
-        ],
-      ),
-    );
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(Duration(milliseconds: (1500 ~/ speed).toInt()),
+        (timer) {
+      getRandomColor();
+      getRandomName();
+      setState(() {});
+    });
   }
 
   void getRandomColor() {
     Random random = Random();
-    int randomNumber = random.nextInt(5);
+    int randomNumber = random.nextInt(6);
     randomColor = colorHex[randomNumber];
   }
 
   void getRandomName() {
     Random random = Random();
-    int randomNumber = random.nextInt(5);
+    int randomNumber = random.nextInt(6);
     randomName = colorNames[randomNumber];
   }
 
@@ -129,9 +82,61 @@ class _RandomColorsState extends State<RandomColors> {
     var colorToString = hexToStringConverter(color);
     if (name == colorToString) {
       points++;
+      if (points % 5 == 0) {
+        speed -= 0.1;
+        timer.cancel();
+        startTimer();
+      }
     } else {
       points--;
+      if (speed < 2.0) {
+        speed += 0.1;
+        timer.cancel();
+        startTimer();
+      }
     }
     setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              'Puntos: $points',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  onGiftTap(randomName, randomColor);
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      width: 120,
+                      color: randomColor,
+                      height: 120,
+                    ),
+                    Text(
+                      randomName,
+                      style: TextStyle(
+                          color: randomColor,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:weatherapi/auth.manager.dart';
 import 'api_service.dart';
 import 'drawer_widget.dart';
-import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   final String username;
   final AuthManager authManager;
 
-  HomeScreen({required this.username, required this.authManager});
+  const HomeScreen(
+      {Key? key, required this.username, required this.authManager})
+      : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeScreenState createState() => _HomeScreenState();
 }
 

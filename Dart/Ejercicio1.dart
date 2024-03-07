@@ -10,11 +10,10 @@ void main() {
   int entero = 5;
   double puntoF = 2.9;
   String cadena = "ejercicio 1 ";
-  bool booleano = true;
   var dinamica = "String de variable dinamica ";
   var dinamica2 = 9;
   //Lista
-  List<int> lista = [1, 3, 5];
+  // List<int> lista = [1, 3, 5];
 
   //Se puede hacer operaciones entre enteros y doubles
   print("Suma int($entero) y double($puntoF): ${entero + puntoF}");
