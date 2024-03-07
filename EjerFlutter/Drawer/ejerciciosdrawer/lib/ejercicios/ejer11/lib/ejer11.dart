@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,13 +14,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: FormularioRegistro(),
+      home: const FormularioRegistro(),
     );
   }
 }
 
 class FormularioRegistro extends StatefulWidget {
+  const FormularioRegistro({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _FormularioRegistroState createState() => _FormularioRegistroState();
 }
 
@@ -31,17 +36,17 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Formulario ejer 11'),
+        title: const Text('Formulario ejer 11'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Nombre',
                 ),
                 validator: (value) {
@@ -55,7 +60,7 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Edad',
                 ),
                 validator: (value) {
@@ -82,7 +87,7 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text('Datos Registrados'),
+                            title: const Text('Datos Registrados'),
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
@@ -93,7 +98,7 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
                             ),
                             actions: <Widget>[
                               TextButton(
-                                child: Text('Cerrar'),
+                                child: const Text('Cerrar'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -104,7 +109,7 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
                       );
                     }
                   },
-                  child: Text('Registrate'),
+                  child: const Text('Registrate'),
                 ),
               ),
             ],

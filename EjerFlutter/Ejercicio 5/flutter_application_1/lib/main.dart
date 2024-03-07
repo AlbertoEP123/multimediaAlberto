@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Ejercicio 5',
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Ejercicio 5, método transform'),
+          title: const Text('Ejercicio 5, método transform'),
         ),
         body: Center(
           child: Row(

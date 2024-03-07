@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class Contenedor extends StatelessWidget {
@@ -11,11 +13,11 @@ class Contenedor extends StatelessWidget {
  // creo variable tipo aligment, para alinear los contenedores
   final AlignmentGeometry? alineacion;
 
-   Contenedor(
+   const Contenedor(
     this.color,
     this.alto,
     this.ancho,
-    this.texto, { /*Valores de padding y alineacion
+    this.texto, {super.key,  /*Valores de padding y alineacion
     que se apliquen al texto(corregido) */
     this.padding,    
     this.alineacion

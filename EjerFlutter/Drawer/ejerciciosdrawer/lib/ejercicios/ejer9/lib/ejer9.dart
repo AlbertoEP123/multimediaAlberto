@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,10 +22,10 @@ class MyGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('GridView con Botones'),
+        title: const Text('GridView con Botones'),
       ),
       body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // Columnas
         ),
         itemCount: 6, // Total de elementos
@@ -35,12 +37,12 @@ class MyGridView extends StatelessWidget {
               color: index.isEven
                   ? Colors.grey[100]
                   : Colors.grey[400], // Color container
-              margin: EdgeInsets.all(5.0),
+              margin: const EdgeInsets.all(5.0),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 50,
                       height: 50,
                       child: CommonButton(index: index), // Numero boton
@@ -53,12 +55,12 @@ class MyGridView extends StatelessWidget {
             // Para las filas 2 a la 4, uso el boton flotante de la linterna
             return Container(
               color: index.isEven ? Colors.grey[100] : Colors.grey[400],
-              margin: EdgeInsets.all(5.0),
-              child: Center(
+              margin: const EdgeInsets.all(5.0),
+              child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 50,
                       height: 50,
                       child: BotonFlotanteLinterna(),
@@ -71,12 +73,12 @@ class MyGridView extends StatelessWidget {
             // Para las otras dos uso el boton switch
             return Container(
               color: index.isEven ? Colors.grey[100] : Colors.grey[400],
-              margin: EdgeInsets.all(5.0),
-              child: Center(
+              margin: const EdgeInsets.all(5.0),
+              child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 90,
                       height: 90,
                       child: SwitchButton(), // Crear instancia aquí
@@ -116,7 +118,7 @@ class CommonButton extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Alerta'),
+                    title: const Text('Alerta'),
                     content: Text(
                         'Botón ${index ?? ''} presionado'), // Contenido de la alerta (numero boton)
                     actions: [
@@ -124,7 +126,7 @@ class CommonButton extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop(); // Al presionar se abre
                         },
-                        child: Text('Cerrar'),
+                        child: const Text('Cerrar'),
                       ),
                     ],
                   );
@@ -139,7 +141,10 @@ class CommonButton extends StatelessWidget {
 }
 
 class BotonFlotanteLinterna extends StatefulWidget {
+  const BotonFlotanteLinterna({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _BotonFlotanteLinternaState createState() => _BotonFlotanteLinternaState();
 }
 
@@ -157,8 +162,8 @@ class _BotonFlotanteLinternaState extends State<BotonFlotanteLinterna> {
         });
       },
       child: _isOn
-          ? Icon(Icons.flashlight_on)
-          : Icon(Icons
+          ? const Icon(Icons.flashlight_on)
+          : const Icon(Icons
               .flashlight_off), // Si no es presionado cambia de icono y viceversa
     );
   }

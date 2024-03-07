@@ -5,16 +5,16 @@ import 'package:weatherapi/drawer_widget.dart';
 class AboutScreen extends StatelessWidget {
   final AuthManager authManager;
 
-  AboutScreen(
-      {required this.authManager}); // Agrega un constructor que reciba AuthManager
+  const AboutScreen({Key? key, required this.authManager})
+      : super(key: key); // Agrega un constructor que reciba AuthManager
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Acerca de'),
+        title: const Text('Pantalla final, documentacion'),
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Weather App - Información de la aplicación',
           style: TextStyle(fontSize: 20),

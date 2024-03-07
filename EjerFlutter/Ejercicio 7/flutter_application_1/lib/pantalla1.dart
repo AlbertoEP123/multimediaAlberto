@@ -46,7 +46,7 @@ class Pantalla1 extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(text),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
       ],
     );
   }

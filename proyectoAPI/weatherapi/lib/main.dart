@@ -13,7 +13,7 @@ void main() async {
 class MyWeatherApp extends StatelessWidget {
   final AuthManager authManager;
 
-  MyWeatherApp({required this.authManager});
+  const MyWeatherApp({Key? key, required this.authManager}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -32,7 +32,7 @@ class Pantalla2 extends StatelessWidget {
           ],
         ),
       ),
-      drawer: DrawerPersonalizado(),
+      drawer: const DrawerPersonalizado(),
     );
   }
 
@@ -47,7 +47,7 @@ class Pantalla2 extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(text),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
       ],
     );
   }

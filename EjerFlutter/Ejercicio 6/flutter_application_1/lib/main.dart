@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Helicoptero'),
+          title: const Text('Helicoptero'),
         ),
-        body: Center(
+        body: const Center(
           child: ejercicio6(),
         ),
       ),
@@ -20,13 +22,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class ejercicio6 extends StatelessWidget {
+  const ejercicio6({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
@@ -37,7 +42,7 @@ class ejercicio6 extends StatelessWidget {
         width: 280,
         height: 280,
         alignment: Alignment.center,
-        child: Text(
+        child: const Text(
           'H',
           style: TextStyle(
             fontSize: 120,

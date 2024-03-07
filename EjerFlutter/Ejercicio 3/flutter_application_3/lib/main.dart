@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
                   const SizedBox(
                       height:
                           10.0), // Añade espacio entre la imagen y la parte superior del contenedor
-                  Container(
+                  SizedBox(
                     height: 130,
                     child: Image.asset('monalisa.jpg'),
                   ),
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
                   const SizedBox(
                       height:
                           10.0), // Añade espacio entre la imagen y la parte superior del contenedor
-                  Container(
+                  SizedBox(
                     height: 130,
                     child: Image.asset('elgrito.jpg'),
                   ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MiApp());
+  runApp(const MiApp());
 }
 
 class MiApp extends StatelessWidget {
+  const MiApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,13 +16,16 @@ class MiApp extends StatelessWidget {
         hintColor: Colors.deepOrange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AdivinaNumeroFormulario(),
+      home: const AdivinaNumeroFormulario(),
     );
   }
 }
 
 class AdivinaNumeroFormulario extends StatefulWidget {
+  const AdivinaNumeroFormulario({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _AdivinaNumeroFormularioState createState() =>
       _AdivinaNumeroFormularioState();
 }
@@ -45,10 +50,10 @@ class _AdivinaNumeroFormularioState extends State<AdivinaNumeroFormulario> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Adivina el Número'),
+        title: const Text('Adivina el Número'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -57,7 +62,7 @@ class _AdivinaNumeroFormularioState extends State<AdivinaNumeroFormulario> {
               TextFormField(
                 controller: _controladorNumero,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Introduce un número del 1 al 100',
                 ),
                 validator: (value) {
@@ -71,7 +76,7 @@ class _AdivinaNumeroFormularioState extends State<AdivinaNumeroFormulario> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -94,12 +99,12 @@ class _AdivinaNumeroFormularioState extends State<AdivinaNumeroFormulario> {
                     }
                   }
                 },
-                child: Text('Comprobar'),
+                child: const Text('Comprobar'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 _mensaje,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.deepPurple,

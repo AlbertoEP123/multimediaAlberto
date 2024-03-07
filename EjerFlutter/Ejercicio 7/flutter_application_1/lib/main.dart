@@ -47,7 +47,7 @@ class Inicio extends StatelessWidget {
       body: const Center(
         child: Text('Bienvenido a la pantalla de inicio'),
       ),
-      drawer: DrawerPersonalizado(),
+      drawer: const DrawerPersonalizado(),
     );
   }
 }

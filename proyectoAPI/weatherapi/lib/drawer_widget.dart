@@ -3,15 +3,14 @@ import 'package:weatherapi/api_weather.dart';
 import 'pantalla_final.dart';
 import 'home.dart';
 
-import 'package:flutter/material.dart';
 import 'package:weatherapi/auth.manager.dart'; // Asegúrate de importar AuthManager
-import 'package:weatherapi/home.dart'; // Asegúrate de importar HomeScreenWithDrawer
+// Asegúrate de importar HomeScreenWithDrawer
 
 class DrawerWidget extends StatelessWidget {
   final AuthManager authManager; // Debes recibir AuthManager aquí
 
-  DrawerWidget(
-      {required this.authManager}); // Asegúrate de recibir AuthManager en el constructor
+  const DrawerWidget({Key? key, required this.authManager})
+      : super(key: key); // Asegúrate de recibir AuthManager en el constructor
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +28,8 @@ class DrawerWidget extends StatelessWidget {
             child: null,
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Pantalla de Inicio'),
+            leading: const Icon(Icons.home),
+            title: const Text('Pantalla de Inicio'),
             onTap: () {
               Navigator.pushReplacement(
                 context,
@@ -43,8 +42,8 @@ class DrawerWidget extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.api),
-            title: Text('Api'),
+            leading: const Icon(Icons.api),
+            title: const Text('Api'),
             onTap: () {
               Navigator.pushReplacement(
                 context,
@@ -57,8 +56,8 @@ class DrawerWidget extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.close),
-            title: Text('Pantalla de Finalizacion'),
+            leading: const Icon(Icons.close),
+            title: const Text('Pantalla de Finalizacion'),
             onTap: () {
               Navigator.pushReplacement(
                 context,

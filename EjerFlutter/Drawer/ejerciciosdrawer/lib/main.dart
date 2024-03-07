@@ -86,7 +86,7 @@ class MyHomePage extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => FormularioRegistro()));
+                        builder: (context) => const FormularioRegistro()));
               },
             ),
             ListTile(
@@ -97,7 +97,7 @@ class MyHomePage extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AdivinaNumeroFormulario()));
+                        builder: (context) => const AdivinaNumeroFormulario()));
               },
             ),
           ],
