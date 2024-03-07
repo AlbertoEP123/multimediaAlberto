@@ -208,16 +208,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       String apiKey = '25ed3f5e8fa270f9f1f38b18e02e25b1';
                       Map<String, dynamic> dailyWeatherData =
                           await ApiService.getDailyWeatherData(city, apiKey);
-                      // Actualizar el estado para mostrar los datos en la interfaz de usuario
+                      // Actualizar el estado para mostrar los datos
                       setState(() {
                         _weatherData =
                             'Datos del pronóstico diario del clima: $dailyWeatherData';
                       });
                     } catch (e) {
-                      // Manejar cualquier error que ocurra al obtener los datos del pronóstico diario del clima
+                      // cualquier error que ocurra al obtener los datos del pronóstico diario del clima
                       print(
                           'Error al obtener datos del pronóstico diario del clima: $e');
-                      // También puedes actualizar el estado para mostrar un mensaje de error
+                      // mensaje de error
                       setState(() {
                         _weatherData =
                             'Error al obtener datos del pronóstico diario del clima: $e';
