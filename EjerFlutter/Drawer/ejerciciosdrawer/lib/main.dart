@@ -1,6 +1,4 @@
 import 'package:ejerciciosdrawer/ejercicios/ejer10/lib/ejer10.dart';
-import 'package:ejerciciosdrawer/ejercicios/ejer11/lib/ejer11.dart';
-import 'package:ejerciciosdrawer/ejercicios/ejer12/lib/ejer12.dart';
 import 'package:ejerciciosdrawer/ejercicios/ejer9/lib/ejer9.dart';
 import 'package:flutter/material.dart';
 
@@ -14,9 +12,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Programacion multimedia',
+      title: 'Drawer Example',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(),
     );
@@ -30,18 +28,27 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('9 10 11 12'),
+        title: const Text('Drawer Example'),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
       ),
       drawer: Drawer(
         child: ListView(
-          padding: EdgeInsets.zero,
           children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 65, 167, 250),
+                color: Colors.blue,
               ),
               child: Text(
-                'Lista de ejercicios',
+                'Lista de Pantallas',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -49,66 +56,34 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.info),
-              title: const Text(
-                  'Lista ejercicios (A partir del 9), Anteriores sin drawer'),
+              title: const Text('Pantalla 1'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MyGridView()));
+                Scaffold.of(context).openDrawer(); // Abre el drawer después de seleccionar una pantalla
               },
             ),
             ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text('Ejercicio 9'),
+              title: const Text('Pantalla 2'),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MyGridView()));
+                Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RandomColors()));
+                Scaffold.of(context).openDrawer(); // Abre el drawer después de seleccionar una pantalla
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text('Ejercicio 10'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RandomColors()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text('Ejercicio 11'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const FormularioRegistro()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text('Ejercicio 12'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AdivinaNumeroFormulario()));
-              },
-            ),
+           
           ],
         ),
       ),
       body: const Center(
         child: Text(
-          'Ejercicios Alberto',
+          'Pantalla Inicial',
           style: TextStyle(fontSize: 20),
         ),
       ),
     );
   }
 }
+
+
+
