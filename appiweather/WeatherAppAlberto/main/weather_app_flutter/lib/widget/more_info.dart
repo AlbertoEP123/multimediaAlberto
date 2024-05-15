@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import '../utils/constanst.dart';
+import '../utils/constants.dart';
 
 Widget moreInfo({
   required String wind,
