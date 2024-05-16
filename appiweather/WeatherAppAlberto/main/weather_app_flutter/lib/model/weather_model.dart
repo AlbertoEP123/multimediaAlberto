@@ -17,13 +17,15 @@ class WeatherModel {
     required this.country,
   });
 
+  //
+
   WeatherModel.fromJson(Map<String, dynamic> json) {
     cityName = json["name"] as String?;
     temp = json["main"]["temp"] as double?;
     wind = json["wind"]["speed"] as double?;
-    humidity = json["main"]["humidity"] as int?;
-    feelsLike = json["main"]["feels_like"] as double?;
-    status = json["weather"][0]["main"] as String?;
-    country = json["sys"]["country"] as String?;
+    humidity = json["main"]["humidity"]as int?;
+    feelsLike = json["main"]["feels_like"]as double?;
+    status = json["weather"][0]["main"]as String?;
+    country = json["sys"]["country"]as String?;
   }
 }

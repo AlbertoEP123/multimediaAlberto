@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../utils/constants.dart'; // Asegúrate de importar el archivo constants.dart correctamente
-import '../services/weather_api_client.dart';
+//
+import '../utils/constanst.dart';
 import '../model/weather_model.dart';
+import '../services/weather_api_client.dart';
 import '../widget/current_weather.dart';
 import '../widget/more_info.dart';
 
@@ -13,21 +15,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final WeatherApiClient weatherapi = WeatherApiClient();
+  //
+  WeatherApiClient weatherapi = WeatherApiClient();
   WeatherModel? data;
-  TextEditingController _cityController = TextEditingController();
+  TextEditingController _cityController = TextEditingController(); // Nuevo
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
     return SafeArea(
       child: Scaffold(
         body: Container(
-          // Utilizamos width y height obtenidos de MediaQuery
-          width: width,
-          height: height,
           decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(
@@ -37,41 +34,46 @@ class _HomePageState extends State<HomePage> {
               fit: BoxFit.cover,
             ),
           ),
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _cityController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter city',
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.3),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
+          width: w,
+          height: h,
+          child: Container(
+            margin: EdgeInsets.all(10),
+            child: Column(
+              // Nuevo
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _cityController,
+                        decoration: InputDecoration(
+                          hintText: 'Enter city',
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.3),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        getData(_cityController.text);
-                      });
-                    },
-                    child: Text('Search'),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Expanded(
-                child: loadedData(),
-              ),
-            ],
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          loadedData();
+                        });
+                      },
+                      child: Text('Search'),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Expanded(
+                  child: loadedData(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -81,8 +83,8 @@ class _HomePageState extends State<HomePage> {
   FutureBuilder<void> loadedData() {
     return FutureBuilder(
       future: getData(_cityController.text),
-      builder: (ctx, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+      builder: (ctx, snp) {
+        if (snp.connectionState == ConnectionState.done) {
           if (data != null) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                 currentWeather(
                   onPressed: () {
                     setState(() {
-                      loadedData(); // Se elimina esta línea, ya que la solicitud ya se realiza en el onPressed del botón "Search"
+                      loadedData();
                     });
                   },
                   temp: "${data!.temp}",
@@ -107,31 +109,26 @@ class _HomePageState extends State<HomePage> {
               ],
             );
           } else {
-            return Text(
-                "No se encontraron datos para esta ciudad."); // Mensaje de error si no hay datos
+            return Container(); // Retorna un widget vacío si data es nulo
           }
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
+        } else if (snp.connectionState == ConnectionState.waiting) {
           return Center(
-            child:
-                CircularProgressIndicator(), // Indicador de carga mientras se espera la respuesta de la API
+            child: CupertinoActivityIndicator(
+              radius: 20,
+              color: Color.fromARGB(255, 172, 216, 247),
+            ),
           );
-        } else if (snapshot.hasError) {
-          return Text(
-              "Error: ${snapshot.error}"); // Mensaje de error si hay un error en la solicitud
         }
         return Container();
       },
     );
   }
 
-  Future<void> getData(String location) async {
-    if (location.isNotEmpty) {
-      // Asegurarse de que la ubicación no esté vacía antes de realizar la solicitud
-      WeatherModel weatherData = await weatherapi.getCurrentWeather(location);
-      setState(() {
-        data = weatherData;
-      });
-    }
+  Future<void> getData(String? location) async {
+    WeatherModel weatherData = await weatherapi.getCurrentWeather(location);
+    setState(() {
+      data = weatherData;
+    });
   }
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //
-import '../utils/constants.dart';
+import '../utils/constanst.dart';
 
 Widget currentWeather({
   required VoidCallback onPressed,
@@ -21,9 +21,7 @@ Widget currentWeather({
               Row(
                 children: [
                   Text("$location, $country", style: kTitleFont),
-                  SizedBox(
-                    width: 5,
-                  ),
+                  SizedBox(width: 5,),
                   IconButton(
                       onPressed: onPressed,
                       icon: Icon(
