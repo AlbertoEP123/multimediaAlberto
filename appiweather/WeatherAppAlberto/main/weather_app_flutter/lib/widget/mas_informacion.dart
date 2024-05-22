@@ -1,20 +1,22 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import '../utils/constanst.dart';
+import '../utils/costantes.dart';
 
-Widget moreInfo({
-  required String wind,
-  required String humidity,
-  required String feelsLike,
+Widget masInformacion({
+  required String viento,
+  required String humedad,
+  required String sensacion,
+  required double width,
+  required double height,
 }) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(15),
     child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
       child: Container(
-        width: w,
-        height: h / 12,
+        width: width,
+        height: height / 4,
         decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.1),
             borderRadius: BorderRadius.circular(15),
@@ -25,9 +27,9 @@ Widget moreInfo({
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text("Wind", style: kMoreInfoFont),
-                Text("Humidity", style: kMoreInfoFont),
-                Text("FeelsLike", style: kMoreInfoFont),
+                Text("Viento", style: fuenteMasInfo),
+                Text("Humedad", style: fuenteMasInfo),
+                Text("Sensacion", style: fuenteMasInfo),
               ],
             ),
             SizedBox(
@@ -36,9 +38,9 @@ Widget moreInfo({
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(wind, style: kMoreInfoFont),
-                Text(humidity, style: kMoreInfoFont),
-                Text(feelsLike, style: kMoreInfoFont),
+                Text(viento, style: fuenteMasInfo),
+                Text(humedad, style: fuenteMasInfo),
+                Text(sensacion, style: fuenteMasInfo),
               ],
             )
           ],

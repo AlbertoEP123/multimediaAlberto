@@ -1,27 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //
-import '../utils/constanst.dart';
+import '../utils/costantes.dart';
 import '../model/weather_model.dart';
 import '../services/weather_api_client.dart';
-import '../widget/current_weather.dart';
-import '../widget/more_info.dart';
+import '../widget/clima_actual.dart';
+import '../widget/mas_informacion.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class PaginaPrincipal extends StatefulWidget {
+  final width;
+  final height;
+  PaginaPrincipal(this.width, this.height, {Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<PaginaPrincipal> createState() => _PaginaPrincipalState(width, height);
 }
 
-class _HomePageState extends State<HomePage> {
-  //
+class _PaginaPrincipalState extends State<PaginaPrincipal> {
+  final width;
+  final height;
+
+  _PaginaPrincipalState(this.width, this.height);
+
   WeatherApiClient weatherapi = WeatherApiClient();
   WeatherModel? data;
-  TextEditingController _cityController = TextEditingController(); // Nuevo
+  TextEditingController _cityController = TextEditingController();
+  Future<void>? _futureData;
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -30,16 +39,15 @@ class _HomePageState extends State<HomePage> {
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.4), BlendMode.darken),
               filterQuality: FilterQuality.high,
-              image: AssetImage("assets/images/backG.jpg"),
+              image: AssetImage("assets/images/weather.png"),
               fit: BoxFit.cover,
             ),
           ),
-          width: w,
-          height: h,
+          width: width,
+          height: height,
           child: Container(
             margin: EdgeInsets.all(10),
             child: Column(
-              // Nuevo
               children: [
                 Row(
                   children: [
@@ -47,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                       child: TextField(
                         controller: _cityController,
                         decoration: InputDecoration(
-                          hintText: 'Enter city',
+                          hintText: 'Escribe la ciudad',
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.3),
                           border: OutlineInputBorder(
@@ -61,17 +69,17 @@ class _HomePageState extends State<HomePage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          loadedData();
+                          _futureData = obtenerDatos(_cityController.text);
                         });
                       },
-                      child: Text('Search'),
+                      child: Text('Buscar'),
                     ),
                   ],
                 ),
                 SizedBox(height: 10),
-                Expanded(
-                  child: loadedData(),
-                ),
+                _futureData == null
+                    ? Container() // Mostrar un contenedor vacío inicialmente
+                    : Expanded(child: CargarDatos()),
               ],
             ),
           ),
@@ -80,36 +88,45 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  FutureBuilder<void> loadedData() {
-    return FutureBuilder(
-      future: getData(_cityController.text),
+  FutureBuilder<void> CargarDatos() {
+    return FutureBuilder<void>(
+      future: _futureData,
       builder: (ctx, snp) {
         if (snp.connectionState == ConnectionState.done) {
+          if (snp.hasError) {
+            return Center(
+              child: Text('La ciudad escrita no existe: ${snp.error}'),
+            );
+          }
           if (data != null) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                currentWeather(
-                  onPressed: () {
-                    setState(() {
-                      loadedData();
-                    });
-                  },
-                  temp: "${data!.temp}",
-                  location: "${data!.cityName}",
-                  status: "${data!.status}",
-                  country: "${data!.country}",
-                ),
-                moreInfo(
-                  wind: "${data!.wind}",
-                  humidity: "${data!.humidity}",
-                  feelsLike: "${data!.feelsLike}",
-                )
+                clima_actual(
+                    onPressed: () {
+                      setState(() {
+                        _futureData = obtenerDatos(_cityController.text);
+                      });
+                    },
+                    temp: "${data!.temp}",
+                    ciudad: "${data!.cityName}",
+                    status: "${data!.status}",
+                    pais: "${data!.country}",
+                    width: width,
+                    height: height),
+                masInformacion(
+                    viento: "${data!.wind} km/h🌬️",
+                    humedad: "${data!.humidity}%💧",
+                    sensacion: "${data!.feelsLike}ºC🌡️",
+                    width: width,
+                    height: height),
               ],
             );
           } else {
-            return Container(); // Retorna un widget vacío si data es nulo
+            return Center(
+              child: Text('No se encontraron datos.'),
+            );
           }
         } else if (snp.connectionState == ConnectionState.waiting) {
           return Center(
@@ -118,13 +135,17 @@ class _HomePageState extends State<HomePage> {
               color: Color.fromARGB(255, 172, 216, 247),
             ),
           );
+        } else {
+          return Container(); // Retorna un widget vacío en otros estados de conexión
         }
-        return Container();
       },
     );
   }
 
-  Future<void> getData(String? location) async {
+  Future<void> obtenerDatos(String? location) async {
+    if (location == null || location.isEmpty) {
+      return;
+    }
     WeatherModel weatherData = await weatherapi.getCurrentWeather(location);
     setState(() {
       data = weatherData;

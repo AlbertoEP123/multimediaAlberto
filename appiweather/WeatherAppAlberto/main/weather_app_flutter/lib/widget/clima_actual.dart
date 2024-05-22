@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //
-import '../utils/constanst.dart';
+import '../utils/costantes.dart';
 
-Widget currentWeather({
-  required VoidCallback onPressed,
-  required String? temp,
-  required String? location,
-  required String? country,
-  required String? status,
-}) {
+Widget clima_actual(
+    {required VoidCallback onPressed,
+    required String? temp,
+    required String? ciudad,
+    required String? pais,
+    required String? status,
+    required double width,
+    required double height}) {
   return Container(
-    width: w,
+    width: width,
     child: Container(
       child: Row(
         children: [
@@ -20,8 +21,10 @@ Widget currentWeather({
             children: [
               Row(
                 children: [
-                  Text("$location, $country", style: kTitleFont),
-                  SizedBox(width: 5,),
+                  Text("$ciudad, $pais", style: fuenteTitulo),
+                  SizedBox(
+                    width: 5,
+                  ),
                   IconButton(
                       onPressed: onPressed,
                       icon: Icon(
@@ -31,14 +34,14 @@ Widget currentWeather({
                       )),
                 ],
               ),
-              Text("${temp}°", style: kTempFont),
+              Text("${temp}°", style: fuenteTemperatura),
             ],
           ),
           Expanded(child: Container()),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20),
-            width: w / 13,
-            height: h / 5,
+            width: width / 10,
+            height: height / 13,
             child: RotatedBox(
               quarterTurns: -1,
               child: Center(
