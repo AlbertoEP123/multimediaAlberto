@@ -42,6 +42,11 @@ Widget clima_actual(
             margin: EdgeInsets.symmetric(horizontal: 20),
             width: width / 10,
             height: height / 13,
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            width: width / 10,
+            height: height / 13,
             child: RotatedBox(
               quarterTurns: -1,
               child: Center(

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //
-import '../utils/costantes.dart';
 import '../model/weather_model.dart';
 import '../services/weather_api_client.dart';
 import '../widget/clima_actual.dart';
@@ -119,17 +118,18 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 clima_actual(
-                    onPressed: () {
-                      setState(() {
-                        _futureData = obtenerDatos(_cityController.text);
-                      });
-                    },
-                    temp: "${data!.temp}",
-                    ciudad: "${data!.cityName}",
-                    status: "${data!.status}",
-                    pais: "${data!.country}",
-                    width: width,
-                    height: height),
+                  onPressed: () {
+                    setState(() {
+                      _futureData = obtenerDatos(_cityController.text);
+                    });
+                  },
+                  temp: "${data!.temp}",
+                  ciudad: "${data!.cityName}",
+                  status: "${data!.status}",
+                  pais: "${data!.country}",
+                  width: width,
+                  height: height,
+                ),
                 masInformacion(
                     viento: "${data!.wind} km/h🌬️",
                     humedad: "${data!.humidity}%💧",
