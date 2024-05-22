@@ -31,6 +31,17 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    String cargarImagenClima(String status) {
+      if (status.toLowerCase().contains('cloud')) {
+        return 'assets/images/weatherLluvia.jpg';
+      }
+      if (status.toLowerCase().contains('clear')) {
+        return 'assets/images/clean.png';
+      } else {
+        return 'assets/images/weather.png';
+      }
+    }
+
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -39,7 +50,11 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.4), BlendMode.darken),
               filterQuality: FilterQuality.high,
-              image: AssetImage("assets/images/weather.png"),
+              image: AssetImage(data != null
+                  ? data!.status != null
+                      ? cargarImagenClima(data!.status!)
+                      : 'assets/images/weather.png'
+                  : 'assets/images/weather.png'),
               fit: BoxFit.cover,
             ),
           ),

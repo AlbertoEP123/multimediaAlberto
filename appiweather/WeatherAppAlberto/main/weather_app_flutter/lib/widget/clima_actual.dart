@@ -12,7 +12,7 @@ Widget clima_actual(
     required double width,
     required double height}) {
   return Container(
-    width: width,
+    width: width / 0.9,
     child: Container(
       child: Row(
         children: [
