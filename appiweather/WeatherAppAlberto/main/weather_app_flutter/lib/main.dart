@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-//
+import 'package:flutter/material.dart';//
 import 'pages/pagina_principal.dart';
 
 void main() {

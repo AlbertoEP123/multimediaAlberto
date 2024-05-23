@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ Widget masInformacion({
                 Text("Viento", style: fuenteMasInfo),
                 Text("Humedad", style: fuenteMasInfo),
                 Text("Sensacion", style: fuenteMasInfo),
+
               ],
             ),
             SizedBox(
@@ -41,6 +43,7 @@ Widget masInformacion({
                 Text(viento, style: fuenteMasInfo),
                 Text(humedad, style: fuenteMasInfo),
                 Text(sensacion, style: fuenteMasInfo),
+               
               ],
             )
           ],

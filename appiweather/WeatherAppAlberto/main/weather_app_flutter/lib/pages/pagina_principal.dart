@@ -32,11 +32,15 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     final height = MediaQuery.of(context).size.height;
     String cargarImagenClima(String status) {
       if (status.toLowerCase().contains('cloud')) {
-        return 'assets/images/weatherLluvia.jpg';
+        return 'assets/images/clouds.png';
       }
       if (status.toLowerCase().contains('clear')) {
         return 'assets/images/clean.png';
-      } else {
+      } 
+      if(status.toLowerCase().contains('rain')){
+        return 'assets/images/weatherLluvia.jpg';
+      }  
+      else {
         return 'assets/images/weather.png';
       }
     }
@@ -47,7 +51,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
           decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.4), BlendMode.darken),
+                  Colors.black.withOpacity(0.2), BlendMode.darken),
               filterQuality: FilterQuality.high,
               image: AssetImage(data != null
                   ? data!.status != null
@@ -71,9 +75,9 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                         decoration: InputDecoration(
                           hintText: 'Escribe la ciudad',
                           filled: true,
-                          fillColor: Colors.white.withOpacity(0.3),
+                          fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide.none,
                           ),
                         ),
