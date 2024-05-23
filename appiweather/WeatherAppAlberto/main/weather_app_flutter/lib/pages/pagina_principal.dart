@@ -139,7 +139,9 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                     humedad: "${data!.humidity}%💧",
                     sensacion: "${data!.feelsLike}ºC🌡️",
                     width: width,
-                    height: height),
+                    height: height,
+                    temp_min: "${data!.temp_min}", temp_max: "${data!.temp}"),
+                    //temp_max: "${data!.temp_max}"),
               ],
             );
           } else {
