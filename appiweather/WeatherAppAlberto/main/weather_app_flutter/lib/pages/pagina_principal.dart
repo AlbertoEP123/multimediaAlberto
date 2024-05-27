@@ -1,26 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//
+import 'package:weather_app_flutter/pages/pagina_inicio.dart';
 import '../model/weather_model.dart';
 import '../services/weather_api_client.dart';
 import '../widget/clima_actual.dart';
 import '../widget/mas_informacion.dart';
 
 class PaginaPrincipal extends StatefulWidget {
-  final width;
-  final height;
-  PaginaPrincipal(this.width, this.height, {Key? key}) : super(key: key);
+  final double width;
+  final double height;
+
+  PaginaPrincipal({Key? key, required this.width, required this.height})
+      : super(key: key);
 
   @override
-  State<PaginaPrincipal> createState() => _PaginaPrincipalState(width, height);
+  _PaginaPrincipalState createState() => _PaginaPrincipalState();
 }
 
 class _PaginaPrincipalState extends State<PaginaPrincipal> {
-  final width;
-  final height;
-
-  _PaginaPrincipalState(this.width, this.height);
-
   WeatherApiClient weatherapi = WeatherApiClient();
   WeatherModel? data;
   TextEditingController _cityController = TextEditingController();
@@ -30,6 +27,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
     String cargarImagenClima(String status) {
       if (status.toLowerCase().contains('cloud')) {
         return 'assets/images/weatherLluvia.jpg';
@@ -43,6 +41,61 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(0, 255, 255, 255),
+          title: Text('Weather App'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                // Al hacer clic en el icono de cerrar sesión, volvemos a la pantalla de inicio de sesión
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => RegistroScreen()),
+                );
+              },
+            ),
+          ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text(
+                  'Weather App',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.home),
+                title: Text('Home'),
+                onTap: () {
+                  Navigator.pop(
+                      context); // Cierra el drawer y permanece en la pantalla actual
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.cloud),
+                title: Text('Pantalla 2'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PaginaPrincipal(width: width, height: height)),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -50,9 +103,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                   Colors.black.withOpacity(0.4), BlendMode.darken),
               filterQuality: FilterQuality.high,
               image: AssetImage(data != null
-                  ? data!.status != null
-                      ? cargarImagenClima(data!.status!)
-                      : 'assets/images/weather.png'
+                  ? cargarImagenClima(data!.status ?? '')
                   : 'assets/images/weather.png'),
               fit: BoxFit.cover,
             ),
@@ -93,7 +144,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                 SizedBox(height: 10),
                 _futureData == null
                     ? Container() // Mostrar un contenedor vacío inicialmente
-                    : Expanded(child: CargarDatos()),
+                    : Expanded(child: CargarDatos(width, height)),
               ],
             ),
           ),
@@ -102,7 +153,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     );
   }
 
-  FutureBuilder<void> CargarDatos() {
+  FutureBuilder<void> CargarDatos(double width, double height) {
     return FutureBuilder<void>(
       future: _futureData,
       builder: (ctx, snp) {
