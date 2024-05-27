@@ -30,11 +30,15 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
 
     String cargarImagenClima(String status) {
       if (status.toLowerCase().contains('cloud')) {
-        return 'assets/images/weatherLluvia.jpg';
+        return 'assets/images/clouds.png';
       }
       if (status.toLowerCase().contains('clear')) {
         return 'assets/images/clean.png';
-      } else {
+      } 
+      if(status.toLowerCase().contains('rain')){
+        return 'assets/images/weatherLluvia.jpg';
+      }  
+      else {
         return 'assets/images/weather.png';
       }
     }
@@ -100,7 +104,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
           decoration: BoxDecoration(
             image: DecorationImage(
               colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.4), BlendMode.darken),
+                  Colors.black.withOpacity(0.2), BlendMode.darken),
               filterQuality: FilterQuality.high,
               image: AssetImage(data != null
                   ? cargarImagenClima(data!.status ?? '')
@@ -122,9 +126,9 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                         decoration: InputDecoration(
                           hintText: 'Escribe la ciudad',
                           filled: true,
-                          fillColor: Colors.white.withOpacity(0.3),
+                          fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide.none,
                           ),
                         ),
@@ -186,7 +190,9 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                     humedad: "${data!.humidity}%💧",
                     sensacion: "${data!.feelsLike}ºC🌡️",
                     width: width,
-                    height: height),
+                    height: height,
+                    temp_min: "${data!.temp_min}", temp_max: "${data!.temp}"),
+                    //temp_max: "${data!.temp_max}"),
               ],
             );
           } else {

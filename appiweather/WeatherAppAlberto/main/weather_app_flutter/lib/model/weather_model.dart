@@ -6,6 +6,7 @@ class WeatherModel {
   double? feelsLike;
   String? status;
   String? country;
+  double? temp_min;
   //
   WeatherModel({
     required this.cityName,
@@ -15,6 +16,7 @@ class WeatherModel {
     required this.feelsLike,
     required this.status,
     required this.country,
+    required this.temp_min,
   });
 
   //
@@ -27,5 +29,8 @@ class WeatherModel {
     feelsLike = json["main"]["feels_like"]as double?;
     status = json["weather"][0]["main"]as String?;
     country = json["sys"]["country"]as String?;
+    temp_min = json["main"]["temp_min"]as double?;
+
+
   }
 }
