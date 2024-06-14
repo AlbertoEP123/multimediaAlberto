@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'pagina_principal.dart'; // Importa tu pantalla principal aquí
+import 'pagina_principal.dart';
 
 class RegistroScreen extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -24,26 +24,72 @@ class RegistroScreen extends StatelessWidget {
     await prefs.setString('username', username);
     await prefs.setString('password', password);
 
+    print('Datos guardados: $username, $password'); // Debugging
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) => PaginaPrincipal(width: 0, height: 0)),
+        builder: (context) => PaginaPrincipal(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          username: username,
+        ),
+      ),
     );
+  }
+
+  Future<void> _iniciarSesion(BuildContext context) async {
+    final String username = _usernameController.text;
+    final String password = _passwordController.text;
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? savedUsername = prefs.getString('username');
+    final String? savedPassword = prefs.getString('password');
+
+    print('Datos guardados para login: $savedUsername, $savedPassword');
+
+    if (username == savedUsername && password == savedPassword) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PaginaPrincipal(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            username: username,
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Nombre de usuario o contraseña incorrectos'),
+      ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(10, 255, 255, 255),
+        backgroundColor: Color.fromARGB(9, 134, 134, 134),
         elevation: 0,
-        title: Text('Registro'),
+        title: Text('Registro e Inicio de Sesión'),
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.grey[200],
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Text(
+              'Bienvenido/a a WeatherApp ',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 24),
             TextField(
               controller: _usernameController,
               decoration: InputDecoration(labelText: 'Nombre de usuario'),
@@ -64,6 +110,11 @@ class RegistroScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () => _guardarDatos(context),
               child: Text('Registrarse'),
+            ),
+            SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: () => _iniciarSesion(context),
+              child: Text('Iniciar Sesión'),
             ),
           ],
         ),

@@ -10,12 +10,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
       title: 'Weather App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RegistroScreen(), // Cargar Pantalla1 al inicio
+      home: RegistroScreen(),
     );
   }
 }

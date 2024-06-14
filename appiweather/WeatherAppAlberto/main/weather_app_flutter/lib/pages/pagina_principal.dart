@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_app_flutter/pages/creditosScreen.dart';
 import 'package:weather_app_flutter/pages/pagina_inicio.dart';
 import '../model/weather_model.dart';
 import '../services/weather_api_client.dart';
@@ -9,8 +10,13 @@ import '../widget/mas_informacion.dart';
 class PaginaPrincipal extends StatefulWidget {
   final double width;
   final double height;
+  final String username;
 
-  PaginaPrincipal({Key? key, required this.width, required this.height})
+  PaginaPrincipal(
+      {Key? key,
+      required this.width,
+      required this.height,
+      required this.username})
       : super(key: key);
 
   @override
@@ -34,11 +40,10 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
       }
       if (status.toLowerCase().contains('clear')) {
         return 'assets/images/clean.png';
-      } 
-      if(status.toLowerCase().contains('rain')){
+      }
+      if (status.toLowerCase().contains('rain')) {
         return 'assets/images/weatherLluvia.jpg';
-      }  
-      else {
+      } else {
         return 'assets/images/weather.png';
       }
     }
@@ -52,7 +57,6 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
             IconButton(
               icon: Icon(Icons.exit_to_app),
               onPressed: () {
-                // Al hacer clic en el icono de cerrar sesión, volvemos a la pantalla de inicio de sesión
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => RegistroScreen()),
@@ -69,31 +73,43 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),
-                child: Text(
-                  'Weather App',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Weather App',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Usuario: ${widget.username}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               ListTile(
                 leading: Icon(Icons.home),
                 title: Text('Home'),
                 onTap: () {
-                  Navigator.pop(
-                      context); // Cierra el drawer y permanece en la pantalla actual
+                  Navigator.pop(context);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.cloud),
-                title: Text('Pantalla 2'),
+                leading: Icon(Icons.info),
+                title: Text('Créditos'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            PaginaPrincipal(width: width, height: height)),
+                      builder: (context) => CreditosScreen(),
+                    ),
                   );
                 },
               ),
@@ -118,6 +134,14 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
             margin: EdgeInsets.all(10),
             child: Column(
               children: [
+                Text(
+                  'Hola, ${widget.username}',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
@@ -126,7 +150,8 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                         decoration: InputDecoration(
                           hintText: 'Escribe la ciudad',
                           filled: true,
-                          fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
+                          fillColor: const Color.fromARGB(255, 255, 255, 255)
+                              .withOpacity(0.7),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide.none,
@@ -147,7 +172,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                 ),
                 SizedBox(height: 10),
                 _futureData == null
-                    ? Container() // Mostrar un contenedor vacío inicialmente
+                    ? Container()
                     : Expanded(child: CargarDatos(width, height)),
               ],
             ),
@@ -186,13 +211,13 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                   height: height,
                 ),
                 masInformacion(
-                    viento: "${data!.wind} km/h🌬️",
-                    humedad: "${data!.humidity}%💧",
-                    sensacion: "${data!.feelsLike}ºC🌡️",
-                    width: width,
-                    height: height,
-                    temp_min: "${data!.temp_min}", temp_max: "${data!.temp}"),
-                    //temp_max: "${data!.temp_max}"),
+                  viento: "${data!.wind} km/h🌬️",
+                  humedad: "${data!.humidity}%💧",
+                  sensacion: "${data!.feelsLike}ºC🌡️",
+                  width: width,
+                  height: height,
+                ),
+                //temp_max: "${data!.temp_max}"),
               ],
             );
           } else {
